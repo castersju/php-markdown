@@ -507,9 +507,14 @@ class Markdown implements MarkdownInterface {
 		$text = $this->unhash($text);
 
 		// Then hash the block.
-		static $i = 0;
-		$key = "$boundary\x1A" . ++$i . $boundary;
-		$this->html_hashes[$key] = $text;
+		if(!in_array($text, $this->html_hashes)){
+			static $i = 0;
+			$key = "$boundary\x1A" . ++$i . $boundary;
+			$this->html_hashes[$key] = $text;
+		}
+		else{
+			$key = array_search($text, $this->html_hashes);
+		}
 		return $key; // String that will replace the tag.
 	}
 
